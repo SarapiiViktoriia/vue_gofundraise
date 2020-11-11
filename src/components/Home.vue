@@ -23,26 +23,37 @@
                 value="5"
                 solo
             ></v-text-field>
+            <v-select
+                :items="fontsSizes"
+                label="Font size"
+                name="fontSize"
+                solo
+            ></v-select>
             <v-btn
                 color="primary"
                 elevation="2"
                 type="submit"
-            >Get data</v-btn>
+            >Get data
+            </v-btn>
           </form>
 
         </v-card>
       </v-col>
       <v-col>
         <template v-if="isLoading">
-          <div class="preloader-container">
-          <v-progress-circular
-              indeterminate
-              color="primary"
-          ></v-progress-circular>
-          </div>
+          <v-card
+              class="mx-auto"
+          >
+            <div class="preloader-container">
+              <v-progress-circular
+                  indeterminate
+                  color="primary"
+              ></v-progress-circular>
+            </div>
+          </v-card>
         </template>
         <template v-else>
-          <ItemList :items-array="pages" :type="currentType"></ItemList>
+          <ItemList :items-array="pages"></ItemList>
         </template>
       </v-col>
     </v-row>
@@ -62,30 +73,36 @@ export default {
     pages: [],
     selectItems: ["Team", "Single"],
     isLoading: true,
-    currentType: Boolean
+    currentType: Boolean,
+    fontsSizes: []
   }),
   methods: {
+
+    fontsRange(min, max) {
+      var len = max - min + 1;
+      var arr = new Array(len);
+      for (var i=0; i<len; i++) {
+        arr[i] = min + i;
+      }
+      return arr;
+    },
+
     queryBuilder(formElements) {
       this.currentType = formElements.type.value === "Team";
-      return `https://api.gofundraise.com.au/v1/pages/search`+
-          `?eventcampaignid=${formElements.eventId.value}`+
-          `&pagetype=${formElements.type.value === "Team" ? "T" : "S"}`+
-          `&sortorder=desc&sortby=4`+
+      return `https://api.gofundraise.com.au/v1/pages/search` +
+          `?eventcampaignid=${formElements.eventId.value}` +
+          `&pagetype=${formElements.type.value === "Team" ? "T" : "S"}` +
+          `&sortorder=desc&sortby=4` +
           `&pagesize=${formElements.quantity.value}`;
     },
 
     responsElementsHandler(respElement) {
-      let page = {
+      return {
         id: respElement.Id,
         imagePath: respElement.ImagePath,
-        creatorName: respElement.CreatorName
-      }
-      if(this.currentType) {
-        page.teamTotal = respElement.Team.TeamTotal;
-      } else {
-        page.individualTotal = respElement.Total;
-      }
-      return page;
+        creatorName: respElement.CreatorName,
+        total: this.currentType ? ('Team total: ' + respElement.Team.TeamTotal) : ('Individual total: ' + respElement.Total)
+      };
     },
 
     loadData(event) {
@@ -101,7 +118,7 @@ export default {
     }
   },
   mounted() {
-
+    this.fontsSizes = this.fontsRange(12, 24);
   }
 }
 </script>
@@ -114,9 +131,11 @@ form.request-form {
   align-items: center;
   padding: 20px;
 }
+
 form.request-form > div.v-input {
   width: 100%;
 }
+
 div.preloader-container {
   height: 100%;
   min-height: 310px;
