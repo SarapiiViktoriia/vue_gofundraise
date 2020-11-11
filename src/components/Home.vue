@@ -1,7 +1,7 @@
 <template>
   <v-container class="grey lighten-5">
     <v-row no-gutters>
-      <v-col>
+      <v-col class="first-card-container">
         <v-card>
           <form @submit.prevent="loadData($event)" class="request-form">
             <v-text-field
@@ -99,21 +99,20 @@
 
         </v-card>
       </v-col>
-      <v-col>
+      <v-col class="second-card-container">
         <template v-if="isLoading">
           <v-card
-              class="mx-auto"
+              class="mx-auto preloader-container"
           >
-            <div class="preloader-container">
+            <span v-show="isFirstRequest"> Waiting for data </span>
               <v-progress-circular
                   indeterminate
                   color="primary"
               ></v-progress-circular>
-            </div>
           </v-card>
         </template>
         <template v-else>
-          <ItemList :items-array="pages" :font-styles="listStyles"></ItemList>
+          <ItemList :items-array="pages" :font-styles="this.listStyles"></ItemList>
         </template>
       </v-col>
     </v-row>
@@ -139,7 +138,7 @@ export default {
       nameTextColor: "111111",
       totalTextColor: "111111"
     },
-    fontSize: 16
+    isFirstRequest: true
   }),
   methods: {
 
@@ -209,10 +208,17 @@ form.request-form > .v-card {
 }
 
 div.preloader-container {
-  height: 100%;
-  min-height: 624px;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
+
+div.second-card-container {
+  min-height: 100%;
+}
+div.second-card-container > .v-card {
+  min-height: 100%;
+}
+
 </style>
