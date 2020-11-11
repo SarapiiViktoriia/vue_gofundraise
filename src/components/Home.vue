@@ -42,7 +42,7 @@
           </div>
         </template>
         <template v-else>
-          <ItemList :items-array="pages"></ItemList>
+          <ItemList :items-array="pages" :type="currentType"></ItemList>
         </template>
       </v-col>
     </v-row>
@@ -61,11 +61,31 @@ export default {
   data: () => ({
     pages: [],
     selectItems: ["Team", "Single"],
-    isLoading: true
+    isLoading: true,
+    currentType: Boolean
   }),
   methods: {
     queryBuilder(formElements) {
-      return `https://api.gofundraise.com.au/v1/pages/search?eventcampaignid=${formElements.eventId.value}&pagetype=${formElements.type.value === "Team" ? "T" : "S"}&sortorder=desc&sortby=4&pagesize=${formElements.quantity.value}`;
+      this.currentType = formElements.type.value === "Team";
+      return `https://api.gofundraise.com.au/v1/pages/search`+
+          `?eventcampaignid=${formElements.eventId.value}`+
+          `&pagetype=${formElements.type.value === "Team" ? "T" : "S"}`+
+          `&sortorder=desc&sortby=4`+
+          `&pagesize=${formElements.quantity.value}`;
+    },
+
+    responsElementsHandler(respElement) {
+      let page = {
+        id: respElement.Id,
+        imagePath: respElement.ImagePath,
+        creatorName: respElement.CreatorName
+      }
+      if(this.currentType) {
+        page.teamTotal = respElement.Team.TeamTotal;
+      } else {
+        page.individualTotal = respElement.Total;
+      }
+      return page;
     },
 
     loadData(event) {
@@ -74,13 +94,7 @@ export default {
       console.log(this.queryBuilder(event.target.elements));
       axios.get(this.queryBuilder(event.target.elements)).then((resp) => {
         resp.data.Pages.forEach(elem => {
-          this.pages.push({
-            id: elem.Id,
-            imagePath: elem.ImagePath,
-            creatorName: elem.CreatorName,
-            totalRaised: elem.Total,
-            raiseTarget: elem.RaiseTarget
-          })
+          this.pages.push(this.responsElementsHandler(elem))
         })
         this.isLoading = false;
       }).catch(error => console.log(error))

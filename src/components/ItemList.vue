@@ -1,6 +1,5 @@
 <template>
   <v-card
-      max-width="450"
       class="mx-auto"
   >
     <v-list three-line>
@@ -14,7 +13,7 @@
 
           <v-list-item-content>
             <v-list-item-title v-html="item.creatorName"></v-list-item-title>
-            <v-list-item-subtitle v-html="item.totalRaised + '/' + item.raiseTarget"></v-list-item-subtitle>
+            <v-list-item-subtitle v-html="type ? ('Team total: '+item.teamTotal) : ('Individual total: ' + item.individualTotal)"></v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </template>
@@ -26,7 +25,8 @@
 export default {
 name: "ItemList",
   props: {
-    itemsArray: Array
+    itemsArray: Array,
+    type: String
   },
   mounted() {
 
