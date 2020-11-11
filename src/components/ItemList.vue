@@ -25,7 +25,7 @@
                 {{ item.creatorName }}
               </span>
               </v-list-item-title>
-              <v-list-item-subtitle v-html="item.total">
+              <v-list-item-subtitle>
               <span v-bind:style="'font-size:'+((fontSize/100)*85)+'px'">
                 {{ item.total }}
               </span>
@@ -43,7 +43,7 @@ export default {
   name: "ItemList",
   props: {
     itemsArray: Array,
-    fontSize: Number || 14
+    fontSize: Number || 16
   },
   mounted() {
 

@@ -24,9 +24,57 @@
                 solo
             ></v-text-field>
             <v-select
-                :items="fontsSizes"
+                :items="this.fontsRange(12, 24)"
                 label="Font size"
                 name="fontSize"
+                @change="($event) => (this.fontSize = $event)"
+                solo
+            ></v-select>
+            <v-select
+                :items="this.fontsRange(12, 24)"
+                label="Font size"
+                name="fontSize"
+                @change="($event) => (this.fontSize = $event)"
+                solo
+            ></v-select>
+
+
+
+            <v-list>
+              <v-list-group
+                  :v-model="true"
+                  no-action
+              >
+                <template v-slot:activator>
+                  <v-list-item-content>
+                    <v-list-item-title v-text="'Text'"></v-list-item-title>
+                  </v-list-item-content>
+                </template>
+
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>Change Text color</v-list-item-title>
+                    <v-color-picker
+                        dot-size="25"
+                        hide-mode-switch
+                        mode="hexa"
+                        show-swatches
+                        swatches-max-height="200"
+                    ></v-color-picker>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-group>
+            </v-list>
+
+
+
+
+
+            <v-select
+                :items="this.fontsRange(12, 24)"
+                label="Font size"
+                name="fontSize"
+                @change="($event) => (this.fontSize = $event)"
                 solo
             ></v-select>
             <v-btn
@@ -53,7 +101,7 @@
           </v-card>
         </template>
         <template v-else>
-          <ItemList :items-array="pages"></ItemList>
+          <ItemList :items-array="pages" :font-size="fontSize"></ItemList>
         </template>
       </v-col>
     </v-row>
@@ -74,9 +122,17 @@ export default {
     selectItems: ["Team", "Single"],
     isLoading: true,
     currentType: Boolean,
-    fontsSizes: []
+    listStyles: {
+      fontSize: 16,
+      nameTextColor: "",
+    },
+    fontSize: 16
   }),
   methods: {
+
+    fontChangeHandler(event) {
+      console.log(event)
+    },
 
     fontsRange(min, max) {
       var len = max - min + 1;
@@ -118,7 +174,6 @@ export default {
     }
   },
   mounted() {
-    this.fontsSizes = this.fontsRange(12, 24);
   }
 }
 </script>
