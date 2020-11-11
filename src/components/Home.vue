@@ -3,10 +3,10 @@
     <v-row no-gutters>
       <v-col>
         <v-card>
-          <form @submit.prevent="loadData($event)">
+          <form @submit.prevent="loadData($event)" class="request-form">
             <v-text-field
                 label="Event ID"
-                placeholder="Placeholder"
+                placeholder="1..."
                 solo
                 name="eventId"
             ></v-text-field>
@@ -18,41 +18,22 @@
             ></v-select>
             <v-text-field
                 label="Quantity"
-                placeholder="Placeholder"
+                placeholder="5..."
                 name="quantity"
+                value="5"
                 solo
             ></v-text-field>
             <v-btn
                 color="primary"
                 elevation="2"
                 type="submit"
-            ></v-btn>
+            >Get data</v-btn>
           </form>
 
         </v-card>
       </v-col>
       <v-col>
-        <v-card
-            max-width="450"
-            class="mx-auto"
-        >
-          <v-list three-line>
-            <template v-for="(item) in pages">
-              <v-list-item
-                  :key="item.id"
-              >
-                <v-list-item-avatar>
-                  <v-img :src="item.imagePath"></v-img>
-                </v-list-item-avatar>
 
-                <v-list-item-content>
-                  <v-list-item-title v-html="item.creatorName"></v-list-item-title>
-                  <v-list-item-subtitle v-html="item.totalRaised + '/' + item.raiseTarget"></v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </template>
-          </v-list>
-        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -62,16 +43,23 @@
 import * as axios from "axios";
 
 export default {
-  name: 'HelloWorld',
+  name: 'Home',
 
   data: () => ({
     pages: [],
-    selectItems: ["T", "S"]
+    selectItems: ["Team", "Single"]
   }),
   methods: {
+
+    queryBuilder(formElements) {
+      return `https://api.gofundraise.com.au/v1/pages/search?
+      eventcampaignid=${formElements.eventId.value}
+      &pagetype=${formElements.type.value === "Team" ? "T" : "S"}
+      &sortorder=desc&sortby=4&pagesize=${formElements.quantity.value})`;
+    },
+
     loadData(event) {
-      let formElements = event.target.elements;
-      axios.get(`https://api.gofundraise.com.au/v1/pages/search?eventcampaignid=${formElements.eventId.value}&pagetype=&sortorder=desc&sortby=4&pagesize=${formElements.quantity.value})`).then((resp) => {
+      axios.get(this.queryBuilder(event.target.elements)).then((resp) => {
         resp.data.Pages.forEach(elem => {
           this.pages.push({
             id: elem.Id,
@@ -89,3 +77,17 @@ export default {
   }
 }
 </script>
+
+<style>
+
+form.request-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+form.request-form > div.v-input {
+  width: 100%;
+}
+
+</style>
