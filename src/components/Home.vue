@@ -6,19 +6,21 @@
           <form @submit.prevent="loadData($event)" class="request-form">
             <v-text-field
                 label="Event ID"
-                placeholder="1..."
+                placeholder="1"
                 solo
                 name="eventId"
+                value="1"
             ></v-text-field>
             <v-select
                 :items="selectItems"
+                :item-value="selectItems[0]"
                 label="Type"
                 name="type"
                 solo
             ></v-select>
             <v-text-field
                 label="Quantity"
-                placeholder="5..."
+                placeholder="5"
                 name="quantity"
                 value="5"
                 solo
@@ -27,6 +29,7 @@
                 :items="this.fontsRange(12, 24)"
                 label="Font size"
                 name="fontSize"
+                :item-value="16"
                 @change="($event) => (this.listStyles.fontSize = $event)"
                 solo
             ></v-select>
