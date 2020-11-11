@@ -111,6 +111,7 @@
               <v-progress-circular
                   indeterminate
                   color="primary"
+                  v-show="!isFirstRequest"
               ></v-progress-circular>
           </v-card>
         </template>
