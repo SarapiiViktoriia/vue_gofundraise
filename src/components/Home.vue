@@ -104,7 +104,7 @@
           <v-card
               class="mx-auto preloader-container"
           >
-            <span v-show="isFirstRequest"> Waiting for data </span>
+            <span v-show="isFirstRequest"> Waiting for commands </span>
               <v-progress-circular
                   indeterminate
                   color="primary"
@@ -142,10 +142,6 @@ export default {
   }),
   methods: {
 
-    fontChangeHandler(event) {
-      console.log(event)
-    },
-
     fontsRange(min, max) {
       var len = max - min + 1;
       var arr = new Array(len);
@@ -174,15 +170,15 @@ export default {
     },
 
     loadData(event) {
+      this.isFirstRequest = false;
       this.isLoading = true;
       this.pages = [];
-      console.log(this.queryBuilder(event.target.elements));
       axios.get(this.queryBuilder(event.target.elements)).then((resp) => {
         resp.data.Pages.forEach(elem => {
           this.pages.push(this.responsElementsHandler(elem))
         })
         this.isLoading = false;
-      }).catch(error => console.log(error))
+      }).catch(error => console.error(error))
     }
   },
   mounted() {

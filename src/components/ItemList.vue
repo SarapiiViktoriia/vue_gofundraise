@@ -46,7 +46,6 @@ export default {
     fontStyles: Object
   },
   mounted() {
-  console.log(this.itemsArray)
   }
 }
 </script>
