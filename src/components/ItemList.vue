@@ -21,12 +21,12 @@
 
             <v-list-item-content>
               <v-list-item-title>
-              <span v-bind:style="'font-size:'+fontSize+'px'">
+              <span v-bind:style="'font-size:'+fontStyles.fontSize+'px; color: #' + fontStyles.nameTextColor">
                 {{ item.creatorName }}
               </span>
               </v-list-item-title>
               <v-list-item-subtitle>
-              <span v-bind:style="'font-size:'+((fontSize/100)*85)+'px'">
+              <span v-bind:style="'font-size:'+((fontStyles.fontSize/100)*85)+'px; color: #' + fontStyles.totalTextColor">
                 {{ item.total }}
               </span>
               </v-list-item-subtitle>
@@ -43,10 +43,10 @@ export default {
   name: "ItemList",
   props: {
     itemsArray: Array,
-    fontSize: Number || 16
+    fontStyles: Object
   },
   mounted() {
-
+  console.log(this.itemsArray)
   }
 }
 </script>

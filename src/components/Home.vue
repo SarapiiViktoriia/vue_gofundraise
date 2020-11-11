@@ -27,18 +27,38 @@
                 :items="this.fontsRange(12, 24)"
                 label="Font size"
                 name="fontSize"
-                @change="($event) => (this.fontSize = $event)"
-                solo
-            ></v-select>
-            <v-select
-                :items="this.fontsRange(12, 24)"
-                label="Font size"
-                name="fontSize"
-                @change="($event) => (this.fontSize = $event)"
+                @change="($event) => (this.listStyles.fontSize = $event)"
                 solo
             ></v-select>
 
+            <v-card elevation="3">
+            <v-list>
+              <v-list-group
+                  :v-model="true"
+                  no-action
+              >
+                <template v-slot:activator>
+                  <v-list-item-content>
+                    <v-list-item-title v-text="'Change name text color'" role="button">
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </template>
 
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-color-picker
+                        dot-size="25"
+                        hide-mode-switch
+                        mode="hexa"
+                        show-swatches
+                        swatches-max-height="200"
+                        value="#111111"
+                        @input="(val)=>{listStyles.nameTextColor = val}"
+                    ></v-color-picker>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-group>
+            </v-list>
 
             <v-list>
               <v-list-group
@@ -47,36 +67,28 @@
               >
                 <template v-slot:activator>
                   <v-list-item-content>
-                    <v-list-item-title v-text="'Text'"></v-list-item-title>
+                    <v-list-item-title v-text="'Change total text color'" role="button">
+                    </v-list-item-title>
                   </v-list-item-content>
                 </template>
 
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>Change Text color</v-list-item-title>
                     <v-color-picker
                         dot-size="25"
                         hide-mode-switch
                         mode="hexa"
                         show-swatches
                         swatches-max-height="200"
+                        value="#000000"
+                        @input="(val)=>{listStyles.totalTextColor = val}"
                     ></v-color-picker>
                   </v-list-item-content>
                 </v-list-item>
               </v-list-group>
             </v-list>
+            </v-card>
 
-
-
-
-
-            <v-select
-                :items="this.fontsRange(12, 24)"
-                label="Font size"
-                name="fontSize"
-                @change="($event) => (this.fontSize = $event)"
-                solo
-            ></v-select>
             <v-btn
                 color="primary"
                 elevation="2"
@@ -101,7 +113,7 @@
           </v-card>
         </template>
         <template v-else>
-          <ItemList :items-array="pages" :font-size="fontSize"></ItemList>
+          <ItemList :items-array="pages" :font-styles="listStyles"></ItemList>
         </template>
       </v-col>
     </v-row>
@@ -124,7 +136,8 @@ export default {
     currentType: Boolean,
     listStyles: {
       fontSize: 16,
-      nameTextColor: "",
+      nameTextColor: "111111",
+      totalTextColor: "111111"
     },
     fontSize: 16
   }),
@@ -187,13 +200,17 @@ form.request-form {
   padding: 20px;
 }
 
-form.request-form > div.v-input {
+form.request-form > div {
   width: 100%;
+}
+
+form.request-form > .v-card {
+  margin-bottom: 30px;
 }
 
 div.preloader-container {
   height: 100%;
-  min-height: 310px;
+  min-height: 624px;
   display: flex;
   justify-content: center;
   align-items: center;
