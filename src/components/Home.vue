@@ -138,8 +138,8 @@ export default {
     currentType: Boolean,
     listStyles: {
       fontSize: 16,
-      nameTextColor: "111111",
-      totalTextColor: "111111"
+      nameTextColor: "#111111",
+      totalTextColor: "#111111"
     },
     isFirstRequest: true
   }),
